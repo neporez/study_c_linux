@@ -13,54 +13,43 @@ typedef struct bag {
 }node;
 
 typedef struct jewel {
+	
+	struct jewel* left;
+	struct jewel* right;
 
 	int weight;
 	int value;
 
-}JEWEL;
+}node_j;
 
-JEWEL jewel[300000];
 int sum=0;
+int jewel_count,bag_count;
 
-
-int partition_jewel(JEWEL jewel[], int left , int right) {
-	int pivot;
-	int low,high;
-	JEWEL temp;
-	low = left;
-	high = right+1;
-	pivot = jewel[left].value;
-
-
-	do {
-		do{
-			low++;
-		}while(pivot < jewel[low].value && low<=right);
-		
-		do {
-			high--;
-		}while(pivot > jewel[high].value && left<=high);
-
-		if(low< high) {
-			SWAP(jewel[low],jewel[high],temp);
+node_j* addJewel(node_j* root,int weight,int value) {
+	node_j *p = root;
+	node_j *parent = NULL;
+	while(p!=NULL) {
+		parent = p;
+		if(p->value < value) {
+			p = p->left;
+		} else if(p->value >= value) {
+			p = p->right;
 		}
-	}while(low<high);
-
-	SWAP(jewel[left],jewel[high],temp);
-	
-	return high;
-
-
-}
-
-void q_sort(JEWEL jewel[],int left, int right) {
-	if(left < right) {
-		int q = partition_jewel(jewel,left,right);
-
-		q_sort(jewel,left,q-1);
-		q_sort(jewel,q+1,right);
 	}
+	node_j* newNode = (node_j*)malloc(sizeof(node_j));
+	newNode->left = newNode->right = NULL;
+	newNode->weight = weight;
+	newNode->value = value;
+	if(parent!=NULL) {
+		if(parent->value < value) {
+			parent->left = newNode;
+		} else if(parent->value >= value) {
+			parent->right = newNode;
+		}
+	}
+	return newNode;
 }
+
 
 node* addBag(node* root,int value) {
 	node *p = root;
@@ -168,22 +157,45 @@ void deleteBag(node*p, node* parent) {
 	free(p);
 }
 
+void searchingJewel(node_j* jewel, node* root);
+
+void stealing(node_j* root_j,node* root) {
+	node_j* p = root_j;
+	searchingJewel(p,root);
+}
+
+void searchingJewel(node_j* jewel,node* root) {
+	if(jewel == NULL) return;
+	searchingJewel(jewel->left,root);
+	if(bag_count == 0 || jewel_count ==0) return;
+	int check = searchBag(root,jewel->weight);
+	if(check > 0) {
+			sum+=jewel->value;
+			bag_count--;
+	}
+	jewel_count--;
+	searchingJewel(jewel->right,root);
+	if(bag_count == 0 || jewel_count ==0) return;
+}
+
 
 
 
 
 int main() {
-	int jewel_count,bag_count;
-	int jewel_index = 0;
-	int temp;	
+	int temp,temp2;	
 
 
 	scanf("%d %d",&jewel_count,&bag_count);
+	
+	scanf("%d %d", &temp, &temp2);
 
-	for(int i=0;i<jewel_count;i++) {
-		scanf("%d %d",&jewel[i].weight,&jewel[i].value);
+	node_j* root_j = addJewel(NULL, temp, temp2);
+
+	for(int i=0;i<jewel_count-1;i++) {
+		scanf("%d %d",&temp,&temp2);
+		addJewel(root_j,temp,temp2);
 	}
-	q_sort(jewel,0,jewel_count-1);
 	scanf("%d",&temp);
 
 	node* root = addBag(NULL, temp);
@@ -192,18 +204,7 @@ int main() {
 		scanf("%d",&temp);
 		addBag(root,temp);
 	}
-
-	while(jewel_count != jewel_index && bag_count > 0) {
-		int weight = jewel[jewel_index].weight;
-		int value = jewel[jewel_index++].value;
-		int check = 0;
-
-		check = searchBag(root,weight);
-		if(check > 0) {
-			sum+=value;
-			bag_count--;
-		}
-	}
+	stealing(root_j,root);
 	printf("%d",sum);
 
 
