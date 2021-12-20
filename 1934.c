@@ -3,7 +3,7 @@
 int getNumber(int a, int b) {
 	if(b==0) return a;
 	else {
-		getNumber(b,a%b);
+		return getNumber(b,a%b);
 	}
 }
 
