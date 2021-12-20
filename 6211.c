@@ -30,6 +30,7 @@ int main() {
 			a*=2;
 			j=0;
 			index++;
+			if(index > b) break;
 		}
 		sum[i*2 + 1] += sum[i];
 		sum[i*2 + 2] += sum[i]+bu[index];
