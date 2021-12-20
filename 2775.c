@@ -1,9 +1,9 @@
 #include<stdio.h>
 
-int apart[15][15];
+long long int apart[15][15];
 
-int livePeople(int i, int j) {
-	int sum = 0;
+long long int livePeople(int i, int j) {
+	long long int sum = 0;
 	for(int k=0;k<=j;k++) {
 		sum+=apart[i-1][k];
 	}	
@@ -28,7 +28,7 @@ int main() {
 	
 	for(int i=0;i<t;i++) {
 		scanf("%d %d",&k,&n);
-		printf("%d",apart[k][n]);
+		printf("%lld",apart[k][n]);
 
 	}
 
