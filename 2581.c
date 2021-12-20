@@ -5,6 +5,7 @@
 int num[10001];
 
 void settingNum() {
+	num[1] = 1;
 	int i = 3;
 	for(;i<=10000;i+=2) {
 		for(int j=2*i;j<=10000;j+=i) {
@@ -21,6 +22,11 @@ int main() {
 	int sum=0,min=10001;
 	
 	int i = (m%2 == 0)? m+1:m;
+	
+	if(m==2||n==2) {
+		sum+=2;
+		min = 2;
+	}
 
 	settingNum();
 	
@@ -32,6 +38,11 @@ int main() {
 			}
 		}	
 	}
+
+	if(sum == 0) {
+		printf("-1");
+		return 0;
+	}	
 	printf("%d\n%d\n",sum,min);
 
 	return 0;
