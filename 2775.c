@@ -28,7 +28,7 @@ int main() {
 	
 	for(int i=0;i<t;i++) {
 		scanf("%d %d",&k,&n);
-		printf("%lld",apart[k][n]);
+		printf("%lld\n",apart[k][n]);
 
 	}
 
