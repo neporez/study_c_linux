@@ -1,87 +1,87 @@
 #include<stdio.h>
-#include<string.h>
 
 
-unsigned int num[100000];
+void segmentTreeCreate(int num[],int segmentTree[], int start ,int end, int node) {
+	int min = 1000000001; 
+	for(int i = start; i<=end;i++) {
+		if(min > num[i]) {
+			min = num[i];
+			segmentTree[node] = min;
+		}
+	}
+	if(start == end) return;
+	segmentTreeCreate(num,segmentTree,start,(start+end)/2,node*2);
+	segmentTreeCreate(num,segmentTree,((start+end)/2)+1,end,node*2+1);
+}
 
-unsigned int numMin[1001];
 
+void segmentInsert(int num[],int segmentTree[], int index, int value, int start, int end, int node) {
+	int min = 1000000001;
+	for(int i= start; i<=end;i++) {
+		if(min > num[i]) {
+			min = num[i];
+			segmentTree[node]= min;
+		}
+	}
+	if(start == end) return;
+	
+	if(start<=index && index<=((start+end)/2)) {
+		segmentInsert(num,segmentTree,index,value,start,(start+end)/2, node*2);
+	} else if(((start+end)/2)+1 <= index && index <= end) {
+		segmentInsert(num,segmentTree,index,value,((start+end)/2)+1, end, node*2+1);
+	}
+}
+
+int segmentSearch(int num[], int segmentTree[], int i, int j, int start, int end ,int node) {
+	
+	if(i > end || j < start) return 1000000001;
+
+	if(i<= start && end <= j) return segmentTree[node];
+
+	int min = 1000000001;
+	
+	int temp=segmentSearch(num,segmentTree,i,j,start,(start+end)/2,node*2);
+	if(min > temp) {
+		min = temp;
+	}
+	temp = segmentSearch(num,segmentTree,i,j,(start+end)/2+1,end,node*2+1);
+	if(min > temp) {
+		min = temp;
+	}
+	return min;
+
+}
 
 
 int main() {
 	int n,m;
-	memset(numMin,255,sizeof(numMin));	
 	scanf("%d",&n);
-	for(int i = 1; i<=n;i++) {
-		scanf("%u",&num[i]);
-		if(numMin[i/100] > num[i]) {
-			numMin[i/100] = num[i];
-		}
+	int num[n+1];
+	int segmentTree[4*(n+1)];
+	for(int i = 1;i <= n;i++) {
+		scanf("%d",&num[i]);
 	}
+
+	segmentTreeCreate(num,segmentTree,1,n,1);
+
 	scanf("%d",&m);
+
 	for(int k=0;k<m;k++) {
 		int cmd;
 		scanf("%d",&cmd);
 		if(cmd == 1) {
-			int i;
-			unsigned int v;
-			scanf("%d %u",&i,&v);
-		        num[i] = v;
-			if(num[i] < numMin[i/100]) {
-				numMin[i/100];
-			}	
+			int i,v;
+			scanf("%d %d",&i,&v);
+			num[i]=v;
+			segmentInsert(num,segmentTree,i,v,1,n,1);
 		}
 		if(cmd == 2) {
 			int i,j;
 			scanf("%d %d",&i,&j);
-			if(i/100 == j/100) {
-				//같은 구역 소속
-				unsigned int min = numMin[1000];
-				for(int l=i;l<=j;l++) {
-					if(num[l] < min) {
-						min = num[l];
-					}
-				}
-				printf("%d\n",min);			
-			}
-			if(i/100 != j/100) {
-				//다른 구역 소속
-				if(j-i > 100) {
-					//범위가 큰 경우
-					int cnt = (j/100)-(i/100);
-					unsigned int min = numMin[1000];	
-					for(int l = i; l< ((i/100)+1)*100; l++) {
-						if(num[l] < min) {
-							min = num[l];
-						}
-					}
-					for(int l = (i/100) + 1; l<cnt;l++) {
-						if(numMin[l] < min) {
-							min = numMin[l];
-						}
-					}
-
-					for(int l = j; l> (j/100)*100 ; l--) {
-						if(num[l] < min) {
-							min = num[l];
-						}
-					}
-					printf("%d\n",min);
-				} else {
-					//범위가 작은 경우
-					unsigned int min = numMin[1000];
-					for(int l=i;l<=j;l++) {
-						if(num[l] < min) {
-							min = num[l];
-						}
-					}
-					printf("%d\n",min);
-				}
-			}
-
+			printf("%d\n",segmentSearch(num,segmentTree,i,j,1,n,1));
 		}
-	}	
 
+	}	
 
 
 	return 0;
