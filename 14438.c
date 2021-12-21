@@ -1,35 +1,28 @@
 #include<stdio.h>
 
-
-void segmentTreeCreate(int num[],int segmentTree[], int start ,int end, int node) {
-	int min = 1000000001; 
-	for(int i = start; i<=end;i++) {
-		if(min > num[i]) {
-			min = num[i];
-			segmentTree[node] = min;
-		}
+int min(int x, int y) {
+	if(x>y) {
+		return y;
+	} else {
+		return x;
 	}
-	if(start == end) return;
-	segmentTreeCreate(num,segmentTree,start,(start+end)/2,node*2);
-	segmentTreeCreate(num,segmentTree,((start+end)/2)+1,end,node*2+1);
 }
 
 
-void segmentInsert(int num[],int segmentTree[], int index, int value, int start, int end, int node) {
-	int min = 1000000001;
-	for(int i= start; i<=end;i++) {
-		if(min > num[i]) {
-			min = num[i];
-			segmentTree[node]= min;
-		}
+int segmentTreeCreate(int num[],int segmentTree[], int start ,int end, int node) {
+	if(start == end) {
+		segmentTree[node] = num[start];
+		return segmentTree[node];
+	} else {
+		segmentTree[node]= min(segmentTreeCreate(num,segmentTree,start,(start+end)/2,node*2), segmentTreeCreate(num,segmentTree,(start+end)/2+1,end,node*2+1));
 	}
-	if(start == end) return;
-	
-	if(start<=index && index<=((start+end)/2)) {
-		segmentInsert(num,segmentTree,index,value,start,(start+end)/2, node*2);
-	} else if(((start+end)/2)+1 <= index && index <= end) {
-		segmentInsert(num,segmentTree,index,value,((start+end)/2)+1, end, node*2+1);
-	}
+}
+
+
+int segmentInsert(int num[],int segmentTree[], int index, int value, int start, int end, int node) {
+	if(start > index || end < index) return segmentTree[node];
+	if(start == end) return segmentTree[node] = value;
+	else return segmentTree[node]=min(segmentInsert(num,segmentTree,index,value,start,(start+end)/2,node*2),segmentInsert(num,segmentTree,index,value,(start+end)/2+1,end,node*2+1));	
 }
 
 int segmentSearch(int num[], int segmentTree[], int i, int j, int start, int end ,int node) {
