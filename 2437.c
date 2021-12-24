@@ -57,12 +57,18 @@ int main() {
 
 	for(int i=0;i<n;i++) {
 		sum+=arr[i];
-		if(arr[i+1] - 1 > sum && i<n-1) {
-			printf("%d",sum+1);
-			return 0;
-		}	
+		if(i<n-1) {
+			if(arr[i+1] - 1 > sum) {
+				printf("%d",sum+1);
+				return 0;
+			}	
+		}
 	}
-	printf("%d",sum+1);
+	if(arr[0] == 1) {
+		printf("%d",sum+1);
+	} else {
+		printf("1");
+	}
 
 
 }
