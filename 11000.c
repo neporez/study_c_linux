@@ -5,8 +5,8 @@ typedef struct timeTable {
 	int end;	
 }T;
 
-T startHeap[200001];
-T endHeap[200001];
+T startHeap[400002];
+T endHeap[400002];
 
 void addStartHeap(int start, int end, int index) {
 	T temp;
