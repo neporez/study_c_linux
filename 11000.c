@@ -107,18 +107,18 @@ int main() {
 	}
 
 	while(1) {
-		if(startHeap[1].start < endHeap[1].end || endHeap[1].end == 0) {
+		if((startHeap[1].start < endHeap[1].end && startHeap[1].start != 0) || (startHeap[1].start!= 0 && endHeap[1].end==0)) {
 			addEndHeap(startHeap[1].start,startHeap[1].end,classroom++);
 			if(maxClassroom < classroom) {
 				maxClassroom = classroom;
 			}
 			popStartHeap(n-popCount);
 			popCount++;
-		} else {
+		} else if((startHeap[1].start >= endHeap[1].end && endHeap[1].end != 0) || (startHeap[1].start ==0 && endHeap[1].end != 0)){
 			popEndHeap(classroom);
 			classroom--;
 		}
-		if(startHeap[1].start == 0&& endHeap[1].end == 0) {
+		if(startHeap[1].start == 0 && endHeap[1].end == 0) {
 			break;
 		}
 	}	
