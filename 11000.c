@@ -44,19 +44,55 @@ void popStartHeap(int endIndex) {
 	if(endIndex == 1) return;
 	int index =1;
 	while(1) {
-		if(startHeap[index].start > startHeap[index*2].start && index*2 < endIndex) {
-			temp = startHeap[index];
-			startHeap[index] = startHeap[index*2];
-			startHeap[index*2] = temp;
-			index*=2;
-			continue;		
-		}
-		if(startHeap[index].start > startHeap[index*2+1].start && index*2+1 < endIndex) {
-			temp = startHeap[index];
-			startHeap[index] =startHeap[index*2+1];
-			startHeap[index*2+1]= temp;
-			index = index*2+1;
-			continue;
+		if(startHeap[index*2].start != 0 && startHeap[index*2+1].start != 0) {
+			if(startHeap[index*2].start < startHeap[index*2+1].start) {
+				if(startHeap[index].start > startHeap[index*2].start && index*2 < endIndex) {
+					temp = startHeap[index];
+					startHeap[index] = startHeap[index*2];
+					startHeap[index*2] = temp;
+					index*=2;
+					continue;		
+				}
+				if(startHeap[index].start > startHeap[index*2+1].start && index*2+1 < endIndex) {
+					temp = startHeap[index];
+					startHeap[index] =startHeap[index*2+1];
+					startHeap[index*2+1]= temp;
+					index = index*2+1;
+					continue;
+				}
+			} else {
+				if(startHeap[index].start > startHeap[index*2+1].start && index*2+1 < endIndex) {
+					temp = startHeap[index];
+					startHeap[index] =startHeap[index*2+1];
+					startHeap[index*2+1]= temp;
+					index = index*2+1;
+					continue;
+				}
+				if(startHeap[index].start > startHeap[index*2].start && index*2 < endIndex) {
+					temp = startHeap[index];
+					startHeap[index] = startHeap[index*2];
+					startHeap[index*2] = temp;
+					index*=2;
+					continue;		
+				}
+			
+			}
+		} else if(startHeap[index*2].start != 0 && startHeap[index*2+1].start == 0) {
+				if(startHeap[index].start > startHeap[index*2].start && index*2 < endIndex) {
+					temp = startHeap[index];
+					startHeap[index] = startHeap[index*2];
+					startHeap[index*2] = temp;
+					index*=2;
+					continue;		
+				}
+		} else if(startHeap[index*2+1].start != 0 && startHeap[index*2].start == 0) {
+				if(startHeap[index].start > startHeap[index*2+1].start && index*2+1 < endIndex) {
+					temp = startHeap[index];
+					startHeap[index] =startHeap[index*2+1];
+					startHeap[index*2+1]= temp;
+					index = index*2+1;
+					continue;
+				}	
 		}
 		break;
 	}
@@ -70,21 +106,58 @@ void popEndHeap(int endIndex) {
 	if(endIndex == 1) return;
 	int index = 1;
 	while(1) {
-		if(endHeap[index].end > endHeap[index*2].end && index*2 < endIndex) {
-			temp = endHeap[index];
-			endHeap[index] = endHeap[index*2];
-			endHeap[index*2] = temp;
-			index*=2;
-			continue;
-		}
-		if(endHeap[index].end > endHeap[index*2+1].end && index*2+1 < endIndex) {
-			temp = endHeap[index];
-			endHeap[index] = endHeap[index*2+1];
-			endHeap[index*2+1] = temp;
-			index = index*2+1;
-			continue;
+		if(endHeap[index*2].end != 0 && endHeap[index*2+1].end != 0) {
+			if(endHeap[index*2].end < endHeap[index*2+1].end) {
+				if(endHeap[index].end > endHeap[index*2].end && index*2 < endIndex) {
+					temp = endHeap[index];
+					endHeap[index] = endHeap[index*2];
+					endHeap[index*2] = temp;
+					index*=2;
+					continue;		
+				}
+				if(endHeap[index].end > endHeap[index*2+1].end && index*2+1 < endIndex) {
+					temp = endHeap[index];
+					endHeap[index] =endHeap[index*2+1];
+					endHeap[index*2+1]= temp;
+					index = index*2+1;
+					continue;
+				}
+			} else {
+				if(endHeap[index].end > endHeap[index*2+1].end && index*2+1 < endIndex) {
+					temp = endHeap[index];
+					endHeap[index] =endHeap[index*2+1];
+					endHeap[index*2+1]= temp;
+					index = index*2+1;
+					continue;
+				}
+				if(endHeap[index].end > endHeap[index*2].end && index*2 < endIndex) {
+					temp = endHeap[index];
+					endHeap[index] = endHeap[index*2];
+					endHeap[index*2] = temp;
+					index*=2;
+					continue;		
+				}
+			
+			}
+		} else if(endHeap[index*2].end != 0 && endHeap[index*2+1].end == 0) {
+				if(endHeap[index].end > endHeap[index*2].end && index*2 < endIndex) {
+					temp = endHeap[index];
+					endHeap[index] = endHeap[index*2];
+					endHeap[index*2] = temp;
+					index*=2;
+					continue;		
+				}
+		} else if(endHeap[index*2+1].end != 0 && endHeap[index*2].end == 0) {
+				if(endHeap[index].end > endHeap[index*2+1].end && index*2+1 < endIndex) {
+					temp = endHeap[index];
+					endHeap[index] =endHeap[index*2+1];
+					endHeap[index*2+1]= temp;
+					index = index*2+1;
+					continue;
+				}	
 		}
 		break;
+
 	}
 }
 
@@ -117,9 +190,8 @@ int main() {
 
 
 		} else if((startHeap[1].start >= endHeap[1].end && endHeap[1].end != 0) || (startHeap[1].start ==0 && endHeap[1].end != 0)){
-			
 			popEndHeap(--classroom);
-			
+				
 
 
 		}
