@@ -113,10 +113,15 @@ int main() {
 				maxClassroom = classroom;
 			}
 			popStartHeap(n-popCount);
-			popCount++;
+			popCount++;	
+
+
 		} else if((startHeap[1].start >= endHeap[1].end && endHeap[1].end != 0) || (startHeap[1].start ==0 && endHeap[1].end != 0)){
-			popEndHeap(classroom);
-			classroom--;
+			
+			popEndHeap(--classroom);
+			
+
+
 		}
 		if(startHeap[1].start == 0 && endHeap[1].end == 0) {
 			break;
