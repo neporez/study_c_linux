@@ -49,6 +49,7 @@ int main() {
 				maxIndex = j;
 			}
 		}
+		maxDistance = 0;
 		plugs[maxIndex] = pluglist[i];
 		plugdistanceCount[pluglist[i]]++;
 		count++;
