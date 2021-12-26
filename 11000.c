@@ -118,7 +118,7 @@ int main() {
 			popEndHeap(classroom);
 			classroom--;
 		}
-		if(startHeap[1].start == 0 || startHeap[1].end == 0) {
+		if(startHeap[1].start == 0&& endHeap[1].end == 0) {
 			break;
 		}
 	}	
