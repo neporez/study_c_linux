@@ -1,85 +1,83 @@
 #include<stdio.h>
-#include<stdlib.h>
 
-typedef struct GATE {
-	int value;
-	struct GATE* next;
-	struct GATE* pref;
-}G;
+unsigned int arr[10000];
 
-G* addGate(int gate) {
-	int index = 1;
-	G* root = (G*)malloc(sizeof(G));
-	root->value = index;
-	root->next = NULL;
-	root->pref = NULL;
-	G* parent = root;
-	while(index<gate) {
-		index++;
-		G* newNode = (G*)malloc(sizeof(G));
-		newNode->value = index;
-		newNode->pref = parent;
-		parent->next = newNode;
-		parent = parent->next;
+unsigned long long pow2(int n) {
+	unsigned long long two = 1;
+	for(int i=0;i<n;i++) {
+		two*=2;
 	}
-
-	return root;
+	return two;
 }
 
-int main() {
-	G* root;
-	G *p;
-	G* _pref;
-	G* _next;
-	int gate,plane;
-	int openGate = 1;
-	int temp=0;
-	int cnt = 0;
-	scanf("%d",&gate);
-	scanf("%d",&plane);
 
-	root = addGate(gate+1);
-	p = root;
+int main() {
+	unsigned long long fullNum= pow2(32)-1;
+	int gate, plane;
+	int gateOpen=1;
+	int count=0;
+	int temp,arrNum,fullTemp,indexTemp = 0;
+	unsigned long long arrTemp;
+	scanf("%d %d",&gate,&plane);
+
 	for(int i=0;i<plane;i++) {
-		p =root;
 		scanf("%d",&temp);
-		if(openGate > 0) {
-			if(p->value > temp || p->value== gate+1) {
-				openGate = 0;
-				continue;
-			}
-			while(p->value <= temp) {
-				p = p->next;
-			}
-			
-			p = p->pref;
-			if(p->pref!=NULL) {
-				_pref = p->pref;
+		indexTemp = 0;
+		if(gateOpen>0) {
+			if((arr[temp/32] >> (((temp%32)-1)))%2 != 1) {
+				arr[temp/32]+= pow2((temp%32)-1);
+				count++;
+				continue;	
 			} else {
-				_pref = NULL;
+				arrNum = temp/32;
+				arrTemp = (arr[arrNum] % pow2(temp%32));
+				fullTemp = pow2(temp%32)-1;
+				if(arrTemp != fullTemp) {
+					for(int j=1;j<=(temp%32);j++) {
+						if(arrTemp%2 == 0) {
+							indexTemp = j;
+						}
+						arrTemp/=2;
+					}
+					arr[arrNum]+=pow2(indexTemp-1);
+					count++;
+					continue;
+				} else {
+					if(arrNum == 0) {
+						gateOpen = 0;
+						continue;
+					} else {
+						while(arr[--arrNum] == fullNum) {
+							if(arrNum == 0) break;
+						}
+						if(arrNum == 0 && arr[arrNum] == fullNum) {
+							gateOpen = 0;
+							continue;
+						} else {
+							arrTemp = arr[arrNum];
+							for(int j=1;j<=32;j++) {
+								if(arrTemp%2 == 0) {
+									indexTemp = j;
+								}	
+								arrTemp/=2;	
+							}
+							arr[arrNum]+=pow2(indexTemp-1);
+							count++;
+							continue;
+						}
+
+
+					}
+				}
+				
 			}
-			if(p->next!=NULL) {
-				_next = p->next;
-			} else {
-				_next = NULL;
-			}
-			if(p->pref!=NULL) {
-				_pref->next = _next;
-			} else {
-				root = _next;
-				_next->pref = NULL;
-			}
-			if(p->next!=NULL) { 
-				_next->pref = _pref;
-			} else {
-				_pref->next = NULL;
-			}
-			free(p);
-			cnt++;
 		}
+
+
 	}
-	printf("%d",cnt);
-	
+
+
+	printf("%d",count);
 
 
 
