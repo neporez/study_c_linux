@@ -23,17 +23,23 @@ int main() {
 	for(int i=0;i<plane;i++) {
 		scanf("%d",&temp);
 		indexTemp = 0;
+		for(int i=0;i<32;i++) {
+			printf("%d ",(arr[0] >> i)%2);
+		}
+		printf("\n");
 		if(gateOpen>0) {
-			if((arr[temp/32] >> (((temp%32)-1)))%2 != 1) {
-				arr[temp/32]+= pow2((temp%32)-1);
+			if((arr[(temp-1)/32] >> ((temp-1)%32)) %2 != 1) {
+				arr[(temp-1)/32]+= pow2((temp-1)%32);
 				count++;
 				continue;	
 			} else {
-				arrNum = temp/32;
-				arrTemp = (arr[arrNum] % pow2(temp%32));
-				fullTemp = pow2(temp%32)-1;
+				printf("check!\n");
+				arrNum = (temp-1)/32;
+				arrTemp = (arr[arrNum] % pow2((temp-1)%32)+1);
+
+				fullTemp = pow2((temp-1)%32+1)-1;
 				if(arrTemp != fullTemp) {
-					for(int j=1;j<=(temp%32);j++) {
+					for(int j=1;j<=((temp-1)%32+1);j++) {
 						if(arrTemp%2 == 0) {
 							indexTemp = j;
 						}
